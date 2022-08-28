@@ -6,7 +6,7 @@ This is a self imposed challenge I have given myself. Create 26 games using the 
 
 I put each word in a random word generator and got the following. This list will go into the first commit of the repo so everyone can see I am sticking with the words I got. The only time it will change is when I update the word with a link to the itch.io page.
 
-- Advantage
+- [Advantage](https://adrocodes.itch.io/a-heros-advantage)
 - Bat
 - Contain
 - Displace
