@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  .cursor-custom {
+    cursor: url('/cursorHand_grey.png'), auto;
+  }
+
+  body {
+    overflow: hidden;
+    font-family: theme('fontFamily.serif');
+    background: theme('colors.gray.900');
+    color: white;
+  }
+
+  * {
+    user-select: none;
+  }
+
+  img {
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .pulse {
+    animation: pulse 1.2s infinite ease-in-out alternate;
+  }
+  
+  @keyframes pulse {
+    from { transform: scale(0.95); }
+    to { transform: scale(1.025); }
+  }
+}
