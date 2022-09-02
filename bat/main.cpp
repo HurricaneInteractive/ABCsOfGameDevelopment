@@ -3,7 +3,6 @@
 #include "include/entity.h"
 #include "include/level.h"
 
-
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -14,8 +13,8 @@ int main(void)
     Player player;
     Entity goal;
     Level level;
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 480;
+    const int screenHeight = 480;
     const float SCALE = 2;
 
     InitWindow(screenWidth, screenHeight, "B is for Bat");
@@ -29,6 +28,7 @@ int main(void)
 
     auto goal_position = level.GetEntityPosition('x');
     player.SetPosition(level.GetEntityPosition('z'));
+    player.SetCollisionMap(level.BuildCollisionMap());
 
     //--------------------------------------------------------------------------------------
 
@@ -45,17 +45,13 @@ int main(void)
             DrawFPS(10, 10);
             ClearBackground(BLACK);
 
-            level.Draw();
-            goal.RenderAtPosition(goal_position);
-            player.Draw();
+            auto offsets = level.Draw();
+            goal.RenderAtPosition(goal_position, offsets);
+            player.Draw(offsets);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
-
-    player.~Player();
-    goal.~Entity();
-    // level.~Level();
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
