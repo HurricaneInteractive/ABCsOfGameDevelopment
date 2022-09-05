@@ -2,6 +2,7 @@
 #include "include/player.h"
 #include "include/entity.h"
 #include "include/level.h"
+#include <string.h>
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -16,6 +17,9 @@ int main(void)
     const int screenWidth = 480;
     const int screenHeight = 480;
     const float SCALE = 2;
+    float startCountdown = 5;
+    bool canMove = false;
+    bool beatLevel = false;
 
     InitWindow(screenWidth, screenHeight, "B is for Bat");
 
@@ -37,20 +41,50 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        player.Update();
+        auto keyPressed = GetKeyPressed();
+        if (canMove)
+        {
+            if (!beatLevel)
+                player.Update(keyPressed);
+        }
+        else
+        {
+            startCountdown -= GetFrameTime();
+
+            if (startCountdown < 1)
+                canMove = true;
+        }
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-            DrawFPS(10, 10);
             ClearBackground(BLACK);
 
-            auto offsets = level.Draw();
-            goal.RenderAtPosition(goal_position, offsets);
-            player.Draw(offsets);
+            if (!canMove)
+            {
+                auto text = std::to_string((int) startCountdown).c_str();
+                auto width = MeasureText(text, 20);
+                DrawText(text, GetScreenWidth() / 2 - width / 2, GetScreenHeight() - 30, 20, WHITE);
+            }
 
+            auto offsets = level.Draw();
+            if (!beatLevel) goal.RenderAtPosition(goal_position, offsets);
+            player.Draw(offsets);
+            
+            if (canMove && !beatLevel)
+                level.DrawDarkness(player.GetPosition());
+
+            if (beatLevel)
+            {
+                auto text = "Good Job!";
+                auto width = MeasureText(text, 50);
+                DrawText(text, GetScreenWidth() / 2 - width / 2, 50, 50, WHITE);
+            }
         EndDrawing();
         //----------------------------------------------------------------------------------
+
+        if (player.GetPosition().x == goal_position.x && player.GetPosition().y == goal_position.y)
+            beatLevel = true;
     }
 
     // De-Initialization
