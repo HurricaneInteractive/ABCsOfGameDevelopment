@@ -28,6 +28,7 @@ public:
   void Init();
   void Load(std::string levelName);
   Vector2 Draw();
+  void DrawDarkness(Vector2 playerPosition);
   Vector2 GetEntityPosition(char entity);
   std::vector<Vector2> BuildCollisionMap();
 };
@@ -157,6 +158,8 @@ Vector2 Level::Draw()
   return Vector2{ (float)xOffset, (float)yOffset };
 }
 
+
+
 Vector2 Level::GetEntityPosition(char entity)
 {
   auto entityLayer = layers.at(":entities");
@@ -206,5 +209,27 @@ std::vector<Vector2> Level::BuildCollisionMap()
     std::cerr << "Barrels map not found\n";
     std::cerr << e.what() << '\n';
     return collisionMap;
+  }
+}
+
+void Level::DrawDarkness(Vector2 playerPosition)
+{
+  try
+  {
+    auto darkness = layers.at(":floor");
+
+    for (int i = 0; i < darkness.size(); i++)
+    {
+      for (int j = 0; j < darkness[i].size(); j++)
+      {
+        if (playerPosition.x == j && playerPosition.y == i) continue;
+        DrawRectangle((j * tileSize) + xOffset, (i * tileSize) + yOffset, tileSize, tileSize, BLACK);
+      }
+    }
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << "Guessing the layer doesn't exist\n";
+    std::cerr << e.what() << '\n';
   }
 }
