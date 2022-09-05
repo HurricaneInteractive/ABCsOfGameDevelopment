@@ -15,7 +15,7 @@ public:
   Player() {};
   ~Player();
   void Init();
-  void Update();
+  void Update(int keyPressed);
   void Draw();
   void Draw(Vector2 offset);
   void SetPosition(Vector2 position);
@@ -24,6 +24,7 @@ public:
     collisionMap = _collisionMap;
   }
   bool CanMoveTo(Vector2 destination);
+  Vector2 GetPosition();
 };
 
 void Player::Init()
@@ -56,11 +57,11 @@ bool Player::CanMoveTo(Vector2 destination)
   return result == collisionMap.end() && destination.x >= 0 && destination.y >= 0;
 }
 
-void Player::Update()
+void Player::Update(int keyPressed)
 {
   auto destination = position;
 
-  switch (GetKeyPressed())
+  switch (keyPressed)
   {
     case KEY_A:
     case KEY_LEFT:
@@ -101,4 +102,9 @@ void Player::Update()
 void Player::SetPosition(Vector2 newPosition)
 {
   position = newPosition;
+}
+
+Vector2 Player::GetPosition()
+{
+  return position;
 }
